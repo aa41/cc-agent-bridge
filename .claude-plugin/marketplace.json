@@ -1,0 +1,15 @@
+{
+  "name": "mxc-skills",
+  "owner": { "name": "aa41" },
+  "description": "Claude Code plugins by aa41",
+  "plugins": [
+    {
+      "name": "cc-agent-bridge",
+      "source": "./plugins/cc-agent-bridge",
+      "description": "Delegate coding tasks from Claude Code to Codex or DeepSeek Harness and review the results.",
+      "version": "0.1.0",
+      "category": "development",
+      "tags": ["codex", "deepseek", "delegation", "multi-agent"]
+    }
+  ]
+}

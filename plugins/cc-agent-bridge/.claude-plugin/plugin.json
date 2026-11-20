@@ -1,0 +1,16 @@
+{
+  "name": "cc-agent-bridge",
+  "version": "0.1.0",
+  "description": "Delegate coding tasks from Claude Code to Codex or DeepSeek Harness, run them in isolated git worktrees, and get structured results back for review.",
+  "author": {
+    "name": "aa41"
+  },
+  "repository": "https://github.com/aa41/cc-agent-bridge",
+  "keywords": [
+    "codex",
+    "deepseek",
+    "dsh",
+    "delegation",
+    "multi-agent"
+  ]
+}

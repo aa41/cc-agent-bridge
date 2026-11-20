@@ -1,0 +1,8 @@
+{"type":"session","sessionId":"session-843d9664-32b9-4aa6-aa0a-1742c3ae4a41","cwd":"/tmp/fixture/dsh-s1"}
+{"type":"status","phase":"turn_start","turn":1}
+{"type":"status","phase":"step_start","turn":1,"step":1}
+{"type":"thinking","text":""}
+{"type":"text","text":"PONG"}
+{"type":"status","phase":"step_end","turn":1,"step":1,"usage":{"inputTokens":6228,"outputTokens":3,"cacheReadTokens":0,"cacheWriteTokens":0,"totalTokens":6231}}
+{"type":"status","phase":"turn_end","turn":1,"reason":{"kind":"completed"}}
+{"type":"final","sessionId":"session-843d9664-32b9-4aa6-aa0a-1742c3ae4a41","reason":{"kind":"completed"},"text":"PONG"}

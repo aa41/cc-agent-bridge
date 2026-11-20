@@ -1,0 +1,8 @@
+{"type":"session","sessionId":"session-7952ef2c-dcf1-42e3-8d5b-ebbd1a36b495","cwd":"/tmp/fixture/dsh-s2/repo"}
+{"type":"status","phase":"turn_start","turn":2}
+{"type":"status","phase":"step_start","turn":2,"step":1}
+{"type":"thinking","text":""}
+{"type":"text","text":"I implemented `sum(a, b) { return a + b; }` in `sum.mjs`; I'm deepseek-v4-pro."}
+{"type":"status","phase":"step_end","turn":2,"step":1,"usage":{"inputTokens":8060,"outputTokens":32,"cacheReadTokens":0,"cacheWriteTokens":0,"totalTokens":8092}}
+{"type":"status","phase":"turn_end","turn":2,"reason":{"kind":"completed"}}
+{"type":"final","sessionId":"session-7952ef2c-dcf1-42e3-8d5b-ebbd1a36b495","reason":{"kind":"completed"},"text":"I implemented `sum(a, b) { return a + b; }` in `sum.mjs`; I'm deepseek-v4-pro."}

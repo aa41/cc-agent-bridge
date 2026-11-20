@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "summary", "changes", "tests", "open_questions", "next_steps"],
+  "properties": {
+    "status": { "type": "string", "enum": ["done", "partial", "blocked"] },
+    "summary": { "type": "string" },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "what"],
+        "properties": {
+          "path": { "type": "string" },
+          "what": { "type": "string" }
+        }
+      }
+    },
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command", "passed", "note"],
+        "properties": {
+          "command": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "open_questions": { "type": "array", "items": { "type": "string" } },
+    "next_steps": { "type": "array", "items": { "type": "string" } }
+  }
+}
