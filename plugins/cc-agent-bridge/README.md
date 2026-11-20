@@ -28,7 +28,7 @@
 | Codex CLI | 已测 0.157.1（≥ 0.154） | 可选，委派给 Codex 时需要 |
 | DeepSeek Harness | 已测 0.2.2-rc.5 | 可选，委派给 DeepSeek 时需要；目前为官方预览版 |
 
-macOS、Linux 已验证；Windows 尽力支持。
+**一期（v0.1）只支持 macOS。** Linux 理论上可用但未验证；Windows 不支持。
 
 ## 安装
 

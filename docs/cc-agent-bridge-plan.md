@@ -10,8 +10,8 @@
 | P0 Spike | ✅ | 见 §6 P0 结果 |
 | P1 插件骨架 + Codex | ✅ | `plugins/cc-agent-bridge/`；`claude plugin validate` 通过（插件与市场清单） |
 | P2 DeepSeek Harness | ✅ | dsh 适配器、模型 patch、JSON 块解析与降级 |
-| P3 健壮性 | ✅ 大部分 | 后台/wait/status/list/cancel/clean、resume（累计 diff）、超时/停滞、并发与轮数上限、深度防护、环境清理、17 个测试（假 CLI 回放真实事件流）全绿。未做：停滞检测的 CPU 维度、Windows 实机 |
-| P4 README + 跨机器 | 🟡 | README（仓库首页 + 插件）完成；临时 HOME 中模拟"添加市场 → 安装 → doctor"通过。待做：推送 GitHub、Docker/Linux 验证、另一台真实机器按 README 验收 |
+| P3 健壮性 | ✅ 大部分 | 后台/wait/status/list/cancel/clean、resume（累计 diff）、超时/停滞、并发与轮数上限、深度防护、环境清理、17 个测试（假 CLI 回放真实事件流）全绿。未做：停滞检测的 CPU 维度 |
+| P4 README + 跨机器 | 🟡 | README（仓库首页 + 插件）完成；临时 HOME 中模拟"添加市场 → 安装 → doctor"通过。已提交并关联 `aa41/cc-agent-bridge`。待做：推送、另一台真实 Mac 按 README 验收 |
 
 **真实端到端验证**
 
@@ -42,6 +42,7 @@
 | D4 | Codex 作为调用方移出本期范围（见 §9） |
 | D5 | **做成可分发到其他机器的插件**；开发和测试期间**不在本机安装**（只用 `--plugin-dir` 临时加载） |
 | D6 | Node 可升级 → **dsh 走官方 npm 包**（Node ≥24.9）；**bridge 脚本用 Node 编写**（目标机器装 Codex/dsh 本就需要 Node，不再额外依赖 Python） |
+| D11 | **一期只保证 macOS**：Linux/Windows 移出一期范围（不做 Docker/Linux 验证、不做 Windows 适配） |
 | D10 | **不做正式发布流程**（无 tag、无 Release 包、无 CI 发布）：仓库推到 GitHub、写好 README，用户按 README 用插件市场命令自然安装 |
 
 **非目标**：Codex/dsh 作为调用方、远程/跨机 agent 网络（A2A）、GUI。
@@ -151,7 +152,7 @@
 | Codex CLI | ≥ 0.154（开发基准 0.157.1） | `doctor`，未装则仅禁用 codex worker |
 | dsh | ≥ 0.2.2（预览版，锁定已测版本） | `doctor`，未装则仅禁用 deepseek worker |
 
-- **平台**：macOS、Linux 为一级支持（CI 覆盖）；Windows 为二级支持（P4，处理进程树终止与路径差异）。
+- **平台**：一期只支持 macOS（D11）。代码按 POSIX 编写，Linux 后续再验证；Windows 不在范围内。
 - **不自动安装依赖**：`doctor` 按平台输出安装命令（npm / brew / nvm），由用户执行。缺一个 worker 不影响另一个。
 
 ### 2.3 机器无关性要求
@@ -169,7 +170,6 @@
 
 ### 2.5 干净环境验证（不碰本机配置）
 
-- **Linux**：Docker 容器（`node:24` 镜像 + 安装 Claude Code、Codex、dsh）→ 从 GitHub/本地路径添加市场 → 安装 → `doctor` → 带密钥跑 e2e。
 - **macOS**：临时 `HOME` 目录（`HOME=$(mktemp -d)`）中执行安装流程，验证不依赖开发机已有配置；最终在一台真实的第二台机器上验收一次。
 
 ---
@@ -365,8 +365,7 @@ bridge cancel <run_id> | bridge clean [--older-than 7d]
 ### P4　README 与跨机器验证（1 天）
 
 - 仓库 README：一键安装命令、依赖与安装命令（含 Node 升级、npm `--allow-scripts`、Key 配置）、兼容性矩阵、用法示例、排障。
-- Windows 二级支持：进程树终止（`taskkill /T /F`）、路径与换行处理。
-- 干净环境验证：Docker（Linux）+ 临时 HOME（macOS），完整走"添加市场 → 安装 → doctor → 委派一次"；推到 GitHub 后再在一台真实的其他机器上按 README 走一遍。
+- 干净环境验证：临时 HOME（macOS），完整走"添加市场 → 安装 → doctor → 委派一次"；推到 GitHub 后再在一台真实的其他机器上按 README 走一遍。
 - **验收**：在一台从未配置过的机器上，仅凭 README 完成安装并成功委派 Codex 与 dsh 各一次。
 
 ### P5　可选扩展
@@ -383,9 +382,8 @@ bridge cancel <run_id> | bridge clean [--older-than 7d]
 | 风险 | 影响 | 应对 |
 |---|---|---|
 | dsh 为 developer preview，参数/事件格式可能变 | DeepSeek 适配器失效 | 适配器隔离；fixture 契约测试；兼容性矩阵锁定已测版本，`doctor` 对未测版本告警 |
-| 目标机器环境差异（PATH、nvm、Node 版本、无 git） | 安装后不可用 | 多路径解析 + 覆盖变量；`doctor` 按平台给修复命令；Docker/临时 HOME/第二台机器验证 |
+| 目标机器环境差异（PATH、nvm、Node 版本、无 git） | 安装后不可用 | 多路径解析 + 覆盖变量；`doctor` 给修复命令；临时 HOME + 第二台 Mac 验证 |
 | 插件密钥注入方式不符合预期 | Key 配置体验差 | S6 验证；退化为环境变量 / dsh 自身 `.env` |
-| Windows 进程与路径语义差异 | Windows 不稳定 | 标为二级支持，单独 CI |
 | Codex/Claude Code 升级改格式或插件规范 | 解析或加载失败 | 宽容解析；CI 中 validate；升级后重录 fixture |
 | worker 自述与事实不符 | 错误代码被合入 | touched_files 来自 git；Claude 亲自跑测试 |
 | 成本失控 | 账单 | 返工 ≤3、并发 ≤3、token 上限、result 记录用量 |
